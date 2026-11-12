@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ml"><head><meta charset="utf-8"><title>Fish Poster Maker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#f3f5f7;--card:#fff;--tx:#14202b;--mut:#667;--bd:#d6dde3;--ac:#0a6cff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151a;--card:#1b232b;--tx:#e8eef3;--mut:#9aa7b2;--bd:#33414d;--ac:#5aa2ff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;padding:12px}
+.wrap{max-width:1000px;margin:auto;display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:860px){.wrap{grid-template-columns:380px 1fr;align-items:start}}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px}
+h2{font-size:15px;margin:0 0 8px}label{font-size:12px;color:var(--mut);display:block;margin:6px 0 2px}
+input,select,button{font:inherit;font-size:15px;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);width:100%}
+button{cursor:pointer;width:auto}button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+.sug{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.sug button{padding:6px 10px;font-size:14px}
+.row{display:grid;grid-template-columns:1fr 62px 62px 32px 32px;gap:5px;margin-top:6px;align-items:center}
+.row input{padding:6px;font-size:14px}.row b{font-size:12px}
+.themes{display:flex;gap:6px;flex-wrap:wrap}.themes button{width:34px;height:34px;padding:0;border-radius:50%;border:3px solid transparent}
+.themes button.on{border-color:var(--tx)}
+.stage{overflow:auto}.cg{display:grid;grid-template-columns:1fr 1fr;gap:6px}input[type=color]{height:38px;padding:2px;cursor:pointer}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.tabs button{padding:6px 12px;font-size:14px}.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+#poster{container-type:inline-size;width:min(100%,595px);aspect-ratio:210/297;margin:auto;display:flex;flex-direction:column;padding:7cqw 6.5cqw;color:var(--pt);background:var(--pb);font-family:"Noto Sans Malayalam",system-ui,sans-serif;position:relative;overflow:hidden;box-shadow:0 4px 18px #0003}
+#poster::before{content:'';position:absolute;inset:2.4cqw;border:.4cqw solid var(--pd);border-radius:2cqw;pointer-events:none}#poster::after{content:'';position:absolute;inset:3.6cqw;border:.12cqw solid var(--pd);border-radius:1.2cqw;opacity:.7;pointer-events:none}
+#poster .hd{text-align:center;padding-bottom:1cqw}#poster .hd::after{content:'';display:block;height:.5cqw;margin-top:2.2cqw;background:linear-gradient(90deg,transparent,var(--pa),transparent)}
+#poster .shop{display:inline-block;font-size:3.8cqw;font-weight:700;padding:.8cqw 4cqw;border:.2cqw solid var(--pd);border-radius:99px;background:var(--pc)}
+#poster .ttl{font-size:9.5cqw;font-weight:800;color:var(--pa);line-height:1.15;margin-top:1.5cqw;text-shadow:0 .5cqw 1.6cqw rgba(0,0,0,.28)}
+#poster .dt{font-size:3.2cqw;opacity:.8;margin-top:1cqw}
+#poster .ls{flex:1;min-height:0;display:grid;grid-template-columns:repeat(var(--c,1),minmax(0,1fr));grid-template-rows:repeat(var(--r,6),minmax(0,1fr));align-content:start;overflow:hidden;gap:1.5cqw;padding:2cqw 0}
+.it{display:flex;align-items:center;gap:.5em;background:var(--pc);border:.2cqw solid var(--pd);border-left:.9cqw solid var(--pa);box-shadow:0 .6cqw 1.6cqw rgba(0,0,0,.16);border-radius:.5em;padding:0 .6em;font-size:calc(5cqw*var(--s,1));min-height:0;overflow:hidden}
+.it .em{position:relative;overflow:hidden;font-size:1.15em;width:1.7em;height:1.7em;display:grid;place-items:center;flex:none;border-radius:50%;background:rgba(255,255,255,.16);border:.15cqw solid var(--pd)}.it .nm{flex:1;min-width:0;font-size:1em;font-weight:700;line-height:1.15}.it .nm small{display:block;font-size:.55em;font-weight:400;opacity:.7}
+.pr{text-align:right}.pr .o{font-size:1.25em;font-weight:800;color:var(--pa)}.pr .m{font-size:.62em;opacity:.75}.pr .m s{opacity:.8}
+.empty{text-align:center;opacity:.6;font-size:4cqw}.sec{grid-column:1/-1;display:flex;align-items:center;gap:2cqw;font-size:3.6cqw;font-weight:800;color:var(--pa);letter-spacing:.05em}.sec::before,.sec::after{content:'';flex:1;height:.3cqw;background:linear-gradient(90deg,transparent,var(--pa))}.sec::after{transform:scaleX(-1)}
+#poster .ft{text-align:center;font-size:3.4cqw;font-weight:700;padding:1.8cqw 3cqw;border:.2cqw solid var(--pd);border-radius:99px;background:var(--pc)}
+@media print{@page{size:A4;margin:0}body{padding:0;background:#fff}.panel,.wrap>.no{display:none!important}.wrap{display:block}#poster{width:210mm;height:297mm;box-shadow:none;aspect-ratio:auto;print-color-adjust:exact;-webkit-print-color-adjust:exact}#poster{font-size:calc(210mm/100)}}
+#poster.split{padding:0;background:#fff;color:#111}#poster.split::before,#poster.split::after{display:none}
+.sp{flex:1;min-height:0;display:flex}.spl{width:60%;background:var(--sl);color:var(--st);display:flex;flex-direction:column;padding:4cqw 3.5cqw 2cqw 5cqw;min-height:0}
+.sph{text-align:center;font-size:5.4cqw;font-weight:800;line-height:1.25;margin-bottom:2cqw}.sph small{display:block;color:var(--sa);font-size:4cqw;font-weight:600}
+.spf{display:flex;flex-direction:column;min-height:0}.rw{flex:1;min-height:0;display:flex;align-items:center;justify-content:space-between;gap:2cqw;font-weight:700}.rw .p{white-space:nowrap}.rw .p i{font-style:normal;font-weight:500;opacity:.9}
+.spph{height:26cqw;margin:2cqw 0 0;border-radius:2cqw;overflow:hidden;flex:none}.spph img{width:100%;height:100%;object-fit:cover}
+.pill{align-self:center;background:#fff;color:var(--sl);font-weight:800;font-size:4.6cqw;padding:.8cqw 8cqw;border-radius:2cqw;margin:2cqw 0 1.5cqw;flex:none}
+.spr{width:40%;display:flex;flex-direction:column;padding:4cqw 2cqw;text-align:center;min-height:0}.bk{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:hidden}
+.bf{flex:1;min-height:7cqw;width:100%;position:relative;margin-top:1cqw}.bf img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.bn{font-size:calc(8cqw*var(--ts,1));font-weight:800;color:var(--sl);line-height:1.1}.bl{display:flex;gap:2.5cqw;font-size:calc(5cqw*var(--ts,1));font-weight:800;color:#b3261e;justify-content:center;line-height:1.3}.bp{font-size:calc(8.5cqw*var(--ts,1));font-weight:800;color:#b3261e}.be{font-size:13cqw;line-height:1.1}.spph2{flex:1.3;min-height:0}#poster>*{position:relative;z-index:1}#poster>.bgp{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;pointer-events:none}.lg{height:10cqw;max-width:30%;object-fit:contain}.hd .lg{display:block;margin:0 auto 1.5cqw;height:12cqw}.sft .lg{height:9cqw}
+
+
+#ov{position:fixed;inset:0;z-index:50;background:var(--bg);flex-direction:column;padding-top:env(safe-area-inset-top,0px);display:none}.ovh{display:flex;justify-content:space-between;align-items:center;padding:8px 12px}#ovp{height:50vh;display:flex;justify-content:center;padding:4px 12px;flex:none}#ovp #poster{height:100%;width:auto;max-width:100%;aspect-ratio:210/297}#ovc{flex:1;overflow:auto;padding:6px 12px calc(14px + env(safe-area-inset-bottom,0px))}
+.nn{display:flex;align-items:center;gap:.5em;min-width:0}.th{height:1.8em;width:1.8em;border-radius:50%;object-fit:cover;flex:none;border:.2cqw solid var(--sa)}.bi{flex:1;min-height:0;max-width:100%;object-fit:contain;margin-top:1cqw}.spph2 img{width:100%;height:100%;object-fit:contain}
+.sft{background:var(--sf);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:3cqw;padding:3cqw 5cqw;font-size:3.6cqw;font-weight:700;flex:none}.sft b{font-size:5.4cqw;color:var(--sa)}.sft span{text-align:right}
+:root{--bg:#f4efe4;--card:#fffdf8;--tx:#16202e;--mut:#6b6558;--bd:#e3d9c3;--ac:#0b2a4a;--gold:#c9a24a;--gold2:#8a6a1f}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#070d18;--card:#0f1a2c;--tx:#f1e9d6;--mut:#9aa6b8;--bd:#25354d;--ac:#d9b45a;--gold:#d9b45a;--gold2:#d9b45a}}
+body{background:radial-gradient(900px 380px at 50% -120px,rgba(201,162,74,.2),transparent),var(--bg)}
+.brand{max-width:1000px;margin:0 auto 14px;padding:16px 18px;border-radius:16px;background:linear-gradient(135deg,#0a1f3a,#14406e);color:#fff;border:1px solid rgba(217,180,90,.55);box-shadow:0 6px 20px rgba(0,0,0,.22)}
+.brand b{display:block;font-size:20px;letter-spacing:.3px;color:#f0cf7a}.brand span{font-size:12px;opacity:.85}
+.panel{border-radius:16px;border:1px solid var(--bd);border-top:3px solid var(--gold);box-shadow:0 4px 16px rgba(20,25,40,.1)}
+h2{color:var(--gold2);letter-spacing:.2px}
+button{border-radius:10px}
+button.p,.tabs button.on{background:linear-gradient(135deg,#f0cf7a,#bf9230);color:#1d1503;border-color:#a8842c;font-weight:700}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:0}
+.sug button:hover{border-color:var(--gold)}
+.themes button.on{border-color:var(--gold);box-shadow:0 0 0 2px var(--bg)}
+#poster{box-shadow:0 12px 32px rgba(0,0,0,.3)}
+@media print{.brand{display:none}}
+</style></head><body>
+<header class="brand"><b>🐟 Fish Poster Studio</b><span>Premium daily price poster maker • Fish • Meat • Piece Meen</span></header>
+<div class="wrap">
+<div class="no">
+<div class="panel"><h2>🐟 ചേർക്കാം</h2><div class="tabs" id="tabs"></div>
+<input id="q" placeholder="മീനിന്റെ പേര് type ചെയ്യൂ (neymeen, mathi, ചെമ്മീൻ…)" autocomplete="off">
+<div class="sug" id="sug"></div></div>
+<div class="panel" style="margin-top:14px"><h2>Poster details</h2>
+<label>കടയുടെ പേര്</label><input id="shop" value="ഫ്രഷ് ഫിഷ് മാർട്ട്">
+<label>Title</label><input id="title" value="ഇന്നത്തെ മീൻ വില">
+<label>Date</label><input id="date" type="date">
+<label>Photo 1 (fish – Split layout, left)</label><input id="ph1" type="file" accept="image/*"><label>Photo 2 (meat – Split layout, right)</label><input id="ph2" type="file" accept="image/*">
+<label>🖼 Banner / background photo (live preview)</label><input id="ph3" type="file" accept="image/*"><label>Photo strength</label><input id="bo" type="range" min="10" max="100" value="35" style="padding:0">
+<label>Logo (header / footer)</label><input id="ph4" type="file" accept="image/*"><button onclick="PH.ph3=PH.ph4=null;draw()" style="margin-top:8px">Background & logo remove</button>
+<label>Footer</label><input id="foot" value="📞 98765 43210 • ഫ്രഷ് മീൻ ദിവസവും">
+<label>Theme</label><div class="themes" id="th"></div>
+<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button onclick="delTheme()">🗑 Selected theme delete</button><button onclick="try{localStorage.removeItem('fpH')}catch(e){}location.reload()">↺ Deleted themes thirichu kondu varuka</button></div>
+<details style="margin-top:10px"><summary style="cursor:pointer;font-size:14px">➕ Custom theme add cheyyuka</summary>
+<button class="p" onclick="ovOpen()" style="margin-top:10px;width:100%">👁 Preview screen (live)</button>
+<div id="cbh"><div id="cb"><div class="cg"><div><label>Background 1</label><input type="color" id="c1" value="#0b3d2e"></div><div><label>Background 2</label><input type="color" id="c2" value="#031a13"></div><div><label>Text</label><input type="color" id="c3" value="#ffffff"></div><div><label>Accent (title / price)</label><input type="color" id="c4" value="#ffd24a"></div></div>
+<label>Layout</label><select id="cl"><option value="">Card list</option><option value="split">Split (left list + right meat + footer)</option></select>
+<label>Theme name</label><input id="cn" placeholder="My theme">
+<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="p" onclick="addTheme()">Add theme</button><button onclick="delTheme()">Selected custom theme delete</button></div></div></div></details></div>
+<div class="panel" style="margin-top:14px"><h2>വില (MRP / Offer, ₹ per kg)</h2>
+<div class="row"><b>പേര്</b><b>MRP</b><b>Offer</b><b></b></div><div id="rows"></div>
+<div style="display:flex;gap:8px;margin-top:12px"><button class="p" onclick="window.print()">🖨 Print / Save PDF (A4)</button><button onclick="items=[];draw();rows()">Clear</button></div></div>
+</div>
+<div class="stage"><div id="poster"></div></div>
+</div>
+<script>
+var F=[["അയക്കൂറ","neymeen ayakura","Seer fish","🐟"],["മത്തി","mathi chala","Sardine","🐟"],["അയല","ayala","Mackerel","🐟"],["ചെമ്മീൻ","chemmeen","Prawn","🦐"],["കൊഴുവ","kozhuva nethili","Anchovy","🐟"],["ആവോലി","avoli","Pomfret","🐟"],["കരിമീൻ","karimeen","Pearl spot","🐠"],["ചൂര","choora","Tuna","🐟"],["കണവ","kanava","Squid","🦑"],["ഞണ്ട്","njandu","Crab","🦀"],["നത്തോലി","nathholi","Small anchovy","🐟"],["മാന്തൾ","manthal","Cuttlefish","🦑"],["കിളിമീൻ","kilimeen","Threadfin bream","🐠"],["തിരുത","thiruta","Mullet","🐟"],["പാര","paara","Trevally","🐟"],["വറ്റ","vatta","Trevally","🐟"],["ചെമ്പല്ലി","chembally","Snapper","🐟"],["മോദ","moda","Bullseye","🐟"],["ചൂടൻ","choodan","Lizardfish","🐟"],["ഏട്ട","etta","Catfish","🐟"],["കാളാഞ്ചി","kalanji","Barramundi","🐟"],["മുള്ളൻ","mullan","Pufferfish","🐡"],["സ്രാവ്","sravu mushi","Shark","🦈"],["കക്ക","kakka","Clam","🐚"],["കല്ലുമ്മക്കായ","kallummakkaya","Mussel","🐚"],["ആകോലി","akoli","Barracuda","🐟"],["വാള","vala","Ribbon fish","🐟"],["നെത്തോലി","nethili","Anchovy","🐟"],["തിലാപ്പിയ","tilapia","Tilapia","🐟"],["രോഹു","rohu","Rohu","🐟"],["കട്‌ല","catla","Catla","🐟"],["ചാള","chala","Sardine","🐟"]];
+var T=[['Royal Navy','#08224a','#ffffff','#f5c76a','rgba(255,255,255,.08)','rgba(245,199,106,.45)','radial-gradient(circle at 12% 0,#1a5c9a 0,transparent 55%),radial-gradient(circle at 100% 100%,#0e4478 0,transparent 50%),linear-gradient(160deg,#08224a,#03101f)'],['Black Gold','#14100a','#f6ecd0','#e6b94d','rgba(230,185,77,.09)','rgba(230,185,77,.5)','radial-gradient(circle at 50% 0,#33280f 0,#0c0b09 65%)'],['Emerald','#0b4a39','#effff7','#7df0b8','rgba(255,255,255,.08)','rgba(125,240,184,.4)','radial-gradient(circle at 85% 0,#14795c 0,transparent 55%),linear-gradient(165deg,#0b4a39,#03201a)'],['Offer Red','#c4102b','#ffffff','#ffe14d','rgba(0,0,0,.22)','rgba(255,225,77,.55)','radial-gradient(circle at 50% 0,#ff4a5f 0,transparent 60%),linear-gradient(160deg,#d8142f,#7d0016)'],['Sunset','#f08a5d','#3a1405','#b83200','rgba(255,255,255,.6)','rgba(184,50,0,.3)','linear-gradient(165deg,#fff1d6,#ffc68c 55%,#f4906a)'],['Pearl','#e7eef8','#10243f','#0a5bd6','#ffffff','rgba(10,91,214,.22)','linear-gradient(160deg,#ffffff,#dfe9f7)'],['Rose','#ffc8dc','#4a0d2a','#c21860','rgba(255,255,255,.7)','rgba(194,24,96,.3)','linear-gradient(160deg,#fff4f8,#ffc6db)'],['Aqua','#014d63','#e9ffff','#5ff5e1','rgba(255,255,255,.09)','rgba(95,245,225,.4)','linear-gradient(170deg,#032235,#01566b 60%,#00867f)']];var T0=[["Ocean","#06304f","#ffffff","#ffd23f","#0b4a75","#06304f"],["Sunset","#fff3e0","#4a1d00","#e8590c","#ffe0b2",""],["Green","#0f3d2e","#f1fff8","#7CFC9a","#16573f",""],["Red Offer","#b3001b","#fff","#ffe14d","#d01a36",""],["Dark","#111","#f5f5f5","#00e0b0","#1f1f1f",""],["Light","#ffffff","#12233a","#0a6cff","#eef3f9",""],["Gold","#1c1405","#fff6dc","#ffc933","#2d2209",""],["Pink","#fff0f5","#4a0d2a","#d6246e","#ffd9e8",""]];
+var items=[],ti=0,$=function(i){return document.getElementById(i)};
+F.forEach(function(f){f[4]=f[4]||'fish'});
+F.push(['കേര പീസ്','kera piece','Kera (piece)','🐟','piece'],['മോദ പീസ്','moda modha piece','Moda (piece)','🐟','piece'],['നെയ്മീൻ പീസ്','neymeen ayakura seer piece','Neymeen (piece)','🐟','piece'],['ചൂര പീസ്','choora piece','Tuna (piece)','🐟','piece'],['ചെമ്പല്ലി പീസ്','chembally piece','Snapper (piece)','🐟','piece'],['കാളാഞ്ചി പീസ്','kalanji piece','Barramundi (piece)','🐟','piece'],['വറ്റ പീസ്','vatta piece','Trevally (piece)','🐟','piece'],['ആവോലി പീസ്','avoli piece','Pomfret (piece)','🐟','piece'],['ചിക്കൻ ഇറച്ചി','chicken meat irachi','Chicken meat','🍗','meat'],['ചിക്കൻ ലൈവ്','chicken live kozhi','Chicken live','🐔','meat'],['പോത്ത്','pothu buffalo','Pothu (buffalo)','🐃','meat'],['ബീഫ്','beef pashu','Beef','🐄','meat'],['മട്ടൻ','mutton aadu','Mutton','🐐','meat']);
+var C=[['all','എല്ലാം'],['fish','🐟 Fish'],['piece','🔪 Piece Meen'],['meat','🥩 Meat']],cat='all',TT={fish:'ഇന്നത്തെ മീൻ വില',piece:'ഇന്നത്തെ പീസ് മീൻ വില',meat:'ഇന്നത്തെ ഇറച്ചി വില'};
+function tabs(){$('tabs').innerHTML=C.map(function(c){return '<button class="'+(c[0]==cat?'on':'')+'" onclick="setCat(\''+c[0]+'\')">'+c[1]+'</button>'}).join('')}
+function setCat(c){var v=$('title').value,isDef=v==='ഇന്നത്തെ മീൻ വില'||Object.keys(TT).some(function(k){return TT[k]===v});cat=c;if(isDef&&TT[c])$('title').value=TT[c];tabs();sug();draw()}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var d=new Date();$("date").value=d.toISOString().slice(0,10);
+function thr(){$("th").innerHTML=T.map(function(t,i){return'<button title="'+esc(t[0])+'" onclick="ti='+i+';draw()" style="background:linear-gradient(135deg,'+t[1]+' 50%,'+t[3]+' 50%)"></button>'}).join("")}
+function hx(h,a){return'rgba('+parseInt(h.slice(1,3),16)+','+parseInt(h.slice(3,5),16)+','+parseInt(h.slice(5,7),16)+','+a+')'}
+function saveT(){try{localStorage.setItem('fpT',JSON.stringify(T.filter(function(t){return t[7]})))}catch(e){}}
+function addTheme(){var a=$('c1').value,b=$('c2').value,x=$('c3').value,y=$('c4').value;T.push([$('cn').value||'Custom '+(T.length+1),a,x,y,hx(x,.1),hx(y,.5),'linear-gradient(160deg,'+a+','+b+')',1]);ti=T.length-1;saveT();$('cn').value='';thr();draw()}
+function delTheme(){if(T.length<2)return;var t=T[ti];if(!t[7]){try{var h=JSON.parse(localStorage.getItem('fpH')||'[]');h.push(t[0]);localStorage.setItem('fpH',JSON.stringify(h))}catch(e){}}T.splice(ti,1);ti=0;saveT();thr();draw()}
+try{JSON.parse(localStorage.getItem('fpT')||'[]').forEach(function(t){T.push(t)})}catch(e){}
+thr();
+function sug(){var q=$("q").value.trim().toLowerCase();var l=F.filter(function(f){return(cat=="all"||f[4]==cat)&&(!q||f.slice(0,4).join(" ").toLowerCase().indexOf(q)>-1)});
+l.sort(function(a,b){var x=a[0].toLowerCase().indexOf(q)==0||a[1].indexOf(q)==0?0:1,y=b[0].toLowerCase().indexOf(q)==0||b[1].indexOf(q)==0?0:1;return x-y});
+$("sug").innerHTML=l.slice(0,40).map(function(f){var i=F.indexOf(f);return'<button onclick="add('+i+')">'+f[3]+" "+f[0]+" <small>"+f[2]+"</small></button>"}).join("")||'<button onclick="addCustom()">+ "'+esc($("q").value)+'" ചേർക്കുക</button>'}
+$("q").oninput=sug;$("q").onkeydown=function(e){if(e.key=="Enter"){var b=$("sug").querySelector("button");if(b)b.click()}};
+function add(i){var f=F[i];if(items.some(function(x){return x.i==i}))return;items.push({i:i,c:f[4],n:f[0],e:f[2],em:f[3],m:"",o:""});$("q").value="";sug();draw();rows()}
+function addCustom(){var n=$("q").value.trim();if(!n)return;items.push({i:-1,c:cat=="all"?"fish":cat,n:n,e:"",em:"🐟",m:"",o:""});$("q").value="";sug();draw();rows()}
+function rows(){$("rows").innerHTML=items.map(function(x,k){return'<div class="row"><input value="'+esc(x.n)+'" oninput="items['+k+'].n=this.value;draw(1)"><input type="number" inputmode="numeric" value="'+esc(x.m)+'" placeholder="MRP" oninput="items['+k+'].m=this.value;draw(1)"><input type="number" inputmode="numeric" value="'+esc(x.o)+'" placeholder="Offer" oninput="items['+k+'].o=this.value;draw(1)"><button onclick="pickPhoto('+k+')" style="padding:4px" title="Photo">'+(x.p?'✅':'📷')+'</button><button onclick="items.splice('+k+',1);draw();rows()" style="padding:4px">✕</button></div>'}).join("")}
+function draw(keep){var t=T[ti],p=$("poster");p.style.cssText="--pb:"+t[6]+";--pt:"+t[2]+";--pa:"+t[3]+";--pc:"+t[4]+";--pd:"+t[5];
+[].forEach.call($("th").children,function(b,i){b.className=i==ti?"on":""});
+var dt=$("date").value?new Date($("date").value).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"}):"";
+var n=items.length,c=n>24?3:n>10?2:1,G=[['fish','മീൻ • FISH'],['meat','ഇറച്ചി • MEAT'],['piece','പീസ് മീൻ • PIECE MEEN']].map(function(g){return{k:g[0],h:g[1],a:items.filter(function(x){return(x.c||'fish')==g[0]})}}).filter(function(g){return g.a.length}),hd=G.length>1,tr=[],r=0;G.forEach(function(g){if(hd){tr.push('minmax(0,.6fr)');r+=.6}var k=Math.ceil(g.a.length/c);for(var j=0;j<k;j++)tr.push('minmax(0,1fr)');r+=k});var mn=c==1?6:5;if(r<mn)tr.push('minmax(0,'+(mn-r)+'fr)');r=Math.max(r,mn);var sc=Math.min(Math.min(1,8.7/r),c==1?1:c==2?.62:.42);
+p.innerHTML='<div class="hd"><div class="shop">'+esc($("shop").value)+'</div><div class="ttl">'+esc($("title").value)+'</div><div class="dt">'+dt+'</div></div><div class="ls" style="--c:'+c+';--s:'+sc+';grid-template-rows:'+tr.join(' ')+'">'+(n?G.map(function(g){return(hd?'<div class="sec">'+g.h+'</div>':'')+g.a.map(function(x){var pr=x.o?'<div class="o">₹'+esc(x.o)+'</div>'+(x.m?'<div class="m">MRP <s>₹'+esc(x.m)+'</s></div>':""):'<div class="o">'+(x.m?"₹"+esc(x.m):"")+'</div><div class="m">per kg</div>';return'<div class="it"><span class="em">'+(x.p?'<img src="'+x.p+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">':x.em)+'</span><div class="nm">'+esc(x.n)+'<small>'+esc(x.e)+'</small></div><div class="pr">'+pr+'</div></div>'}).join("")}).join(""):'<div class="empty">മുകളിൽ മീനിന്റെ പേര് type ചെയ്ത് ചേർക്കൂ</div>')+'</div><div class="ft">'+esc($("foot").value)+'</div>'}
+["shop","title","date","foot"].forEach(function(i){$(i).oninput=function(){draw()}});tabs();
+sug();draw();
+T.splice(8,0,['Shop Split','#2b2d8f','#ffffff','#ffe933','','','',0,'split','#1b6a35']);try{var H=JSON.parse(localStorage.getItem('fpH')||'[]');for(var q=T.length-1;q>=0;q--)if(!T[q][7]&&H.indexOf(T[q][0])>-1)T.splice(q,1)}catch(e){}thr();
+var _a=addTheme;addTheme=function(){_a();var t=T[T.length-1];t[8]=$('cl').value;t[9]=$('c2').value;saveT();thr();draw()};
+var PH={};['ph1','ph2'].forEach(function(id){$(id).onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){PH[id]=r.result;draw()};r.readAsDataURL(f)}});
+var pk=-1,pf=document.createElement('input');pf.type='file';pf.accept='image/*';pf.style.display='none';document.body.appendChild(pf);
+function pickPhoto(k){pk=k;pf.value='';pf.click()}
+pf.onchange=function(){var f=pf.files[0];if(!f||pk<0||!items[pk])return;var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,700/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);items[pk].p=c.toDataURL('image/jpeg',.85);draw();rows()};im.src=r.result};r.readAsDataURL(f)};
+function ph(x,em){return x&&x.p?'<div class="bf"><img src="'+x.p+'"></div>':(PH.ph2?'':'<div class="be">'+em+'</div>')}
+function pr2(x){var v=x.o||x.m;return v?'₹'+esc(v):''}
+function drawSplit(t){var p=$('poster'),g=function(k){return items.filter(function(x){return(x.c||'fish')==k})},F1=g('fish'),P1=g('piece'),M1=g('meat');
+p.className='split';var bgs=PH.ph3?';background-image:linear-gradient('+hx(t[1],1-$('bo').value/100)+','+hx(t[1],1-$('bo').value/100)+'),url('+PH.ph3+');background-size:cover;background-position:center':'';p.style.cssText='--sl:'+t[1]+';--st:'+t[2]+';--sa:'+t[3]+';--sf:'+(t[9]||'#1b6a35');
+[].forEach.call($('th').children,function(b,i){b.className=i==ti?'on':''});
+var dt=$('date').value?new Date($('date').value).toLocaleDateString('en-GB'):'';
+var R=Math.max(F1.length+P1.length,6),av=103-(PH.ph1?28:0)-(P1.length?9:0),fs=Math.min(4.8,av/R*.5);
+var rows=function(a){return'<div class="spf" style="flex:'+a.length+'">'+a.map(function(x){var pp=x.o||x.m;return'<div class="rw"><span class="nn">'+(x.p?'<img class="th" src="'+x.p+'">':'')+esc(x.n)+'</span><span class="p">'+(x.o&&x.m?'<s style="opacity:.6;font-size:.8em">₹'+esc(x.m)+'</s> ':'')+(pp?'₹'+esc(pp)+'<i> / kg</i>':'')+'</span></div>'}).join('')+'</div>'};
+var L='<div class="sph">'+esc($('title').value)+'<small>('+dt+')</small></div>'+(F1.length?rows(F1):'')+(PH.ph1?'<div class="spph"><img src="'+PH.ph1+'"></div>':'')+(P1.length?'<div class="pill">പീസ് മീൻ</div>'+rows(P1):'');
+var cl=M1.filter(function(x){return x.e=='Chicken live'})[0],cm=M1.filter(function(x){return x.e=='Chicken meat'})[0],B=[];
+if(cl||cm)B.push('<div class="bk"><div class="bn">ചിക്കൻ</div>'+(cl?'<div class="bl"><span>LIVE</span><span>'+pr2(cl)+'/-KG</span></div>':'')+(cm?'<div class="bl"><span>MEAT</span><span>'+pr2(cm)+'/-KG</span></div>':'')+ph(cl&&cl.p?cl:cm,'🍗')+'</div>');
+M1.forEach(function(x){if(x===cl||x===cm)return;B.push('<div class="bk"><div class="bn">'+esc(x.n)+'</div><div class="bp">'+pr2(x)+'/-KG</div>'+ph(x,x.em)+'</div>')});
+p.innerHTML='<div class="sp"><div class="spl" style="font-size:'+fs+'cqw'+bgs+'">'+L+'</div><div class="spr" style="--ts:'+Math.min(1,3.2/Math.max(B.length,1))+'">'+B.join('')+(PH.ph2?'<div class="spph2"><img src="'+PH.ph2+'"></div>':'')+'</div></div><div class="sft">'+(PH.ph4?'<img class="lg" src="'+PH.ph4+'">':'')+'<b>'+esc($('shop').value)+'</b><span>'+esc($('foot').value)+'</span></div>'}
+function rs(f,m,cb){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL(f.type=='image/png'?'image/png':'image/jpeg',.85))};im.src=r.result};r.readAsDataURL(f)}
+[['ph3',1200],['ph4',500]].forEach(function(a){$(a[0]).onchange=function(){var f=this.files[0];if(f)rs(f,a[1],function(u){PH[a[0]]=u;draw()})}});
+$('bo').oninput=function(){draw()};$('poster').onclick=function(){this.parentNode.classList.toggle('big')};
+var _d=draw;draw=function(){var t=T[ti];if(t[8]=='split'){drawSplit(t)}else{var p=$('poster');p.className='';_d.apply(null,arguments);if(PH.ph3)p.insertAdjacentHTML('afterbegin','<div class="bgp" style="background-image:url('+PH.ph3+');opacity:'+($('bo').value/100)+'"></div>');if(PH.ph4)p.querySelector('.hd').insertAdjacentHTML('afterbegin','<img class="lg" src="'+PH.ph4+'">')}};
+document.body.insertAdjacentHTML('beforeend','<div id="ov"><div class="ovh"><b>👁 Theme preview (live)</b><button onclick="ovClose()">✕ Close</button></div><div id="ovp"></div><div id="ovc"></div></div>');
+var ovOn=false,ovTi=0;
+function dft(){var a=$('c1').value,b=$('c2').value,x=$('c3').value,y=$('c4').value;return['Draft',a,x,y,hx(x,.1),hx(y,.5),'linear-gradient(160deg,'+a+','+b+')',1,$('cl').value,b]}
+function ovDraw(){if(!ovOn)return;T[T.length-1]=dft();ti=T.length-1;draw()}
+function ovBack(){$('ov').style.display='none';document.querySelector('.stage').appendChild($('poster'));$('cbh').appendChild($('cb'))}
+function ovOpen(){ovTi=ti;T.push(dft());ovOn=true;$('ov').style.display='flex';$('ovp').appendChild($('poster'));$('ovc').appendChild($('cb'));ovDraw()}
+function ovClose(){ovOn=false;T.pop();ti=ovTi<T.length?ovTi:0;ovBack();draw()}
+['c1','c2','c3','c4','cl'].forEach(function(id){$(id).addEventListener('input',ovDraw);$(id).addEventListener('change',ovDraw)});
+var _a2=addTheme;addTheme=function(){if(ovOn){T.pop();ovOn=false;ovBack()}_a2()};
+var _dl=delTheme;delTheme=function(){if(!ovOn)_dl()};
+draw();</script></body></html>
