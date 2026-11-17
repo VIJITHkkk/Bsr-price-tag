@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ml"><head><meta charset="utf-8"><title>Fish Poster Maker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#f3f5f7;--card:#fff;--tx:#14202b;--mut:#667;--bd:#d6dde3;--ac:#0a6cff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151a;--card:#1b232b;--tx:#e8eef3;--mut:#9aa7b2;--bd:#33414d;--ac:#5aa2ff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;padding:12px}
+.wrap{max-width:1000px;margin:auto;display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:860px){.wrap{grid-template-columns:380px 1fr;align-items:start}}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px}
+h2{font-size:15px;margin:0 0 8px}label{font-size:12px;color:var(--mut);display:block;margin:6px 0 2px}
+input,select,button{font:inherit;font-size:15px;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);width:100%}
+button{cursor:pointer;width:auto}button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+.sug{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.sug button{padding:6px 10px;font-size:14px}
+.row{display:grid;grid-template-columns:1fr 62px 62px 32px 32px;gap:5px;margin-top:6px;align-items:center}
+.row input{padding:6px;font-size:14px}.row b{font-size:12px}
+.themes{display:flex;gap:6px;flex-wrap:wrap}.themes button{width:34px;height:34px;padding:0;border-radius:50%;border:3px solid transparent}
+.themes button.on{border-color:var(--tx)}
+.stage{overflow:auto}.cg{display:grid;grid-template-columns:1fr 1fr;gap:6px}input[type=color]{height:38px;padding:2px;cursor:pointer}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.tabs button{padding:6px 12px;font-size:14px}.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+#poster{container-type:inline-size;width:min(100%,595px);aspect-ratio:210/297;margin:auto;display:flex;flex-direction:column;padding:7cqw 6.5cqw;color:var(--pt);background:var(--pb);font-family:"Noto Sans Malayalam",system-ui,sans-serif;position:relative;overflow:hidden;box-shadow:0 4px 18px #0003}
+#poster::before{content:'';position:absolute;inset:2.4cqw;border:.4cqw solid var(--pd);border-radius:2cqw;pointer-events:none}#poster::after{content:'';position:absolute;inset:3.6cqw;border:.12cqw solid var(--pd);border-radius:1.2cqw;opacity:.7;pointer-events:none}
+#poster .hd{text-align:center;padding-bottom:1cqw}#poster .hd::after{content:'';display:block;height:.5cqw;margin-top:2.2cqw;background:linear-gradient(90deg,transparent,var(--pa),transparent)}
+#poster .shop{display:inline-block;font-size:3.8cqw;font-weight:700;padding:.8cqw 4cqw;border:.2cqw solid var(--pd);border-radius:99px;background:var(--pc)}
+#poster .ttl{font-size:9.5cqw;font-weight:800;color:var(--pa);line-height:1.15;margin-top:1.5cqw;text-shadow:0 .5cqw 1.6cqw rgba(0,0,0,.28)}
+#poster .dt{font-size:3.2cqw;opacity:.8;margin-top:1cqw}
+#poster .ls{flex:1;min-height:0;display:grid;grid-template-columns:repeat(var(--c,1),minmax(0,1fr));grid-template-rows:repeat(var(--r,6),minmax(0,1fr));align-content:start;overflow:hidden;gap:1.5cqw;padding:2cqw 0}
+.it{display:flex;align-items:center;gap:.5em;background:var(--pc);border:.2cqw solid var(--pd);border-left:.9cqw solid var(--pa);box-shadow:0 .6cqw 1.6cqw rgba(0,0,0,.16);border-radius:.5em;padding:0 .6em;font-size:calc(5cqw*var(--s,1));min-height:0;overflow:hidden}
+.it .em{position:relative;overflow:hidden;font-size:1.15em;width:1.7em;height:1.7em;display:grid;place-items:center;flex:none;border-radius:50%;background:rgba(255,255,255,.16);border:.15cqw solid var(--pd)}.it .nm{flex:1;min-width:0;font-size:1em;font-weight:700;line-height:1.15}.it .nm small{display:block;font-size:.55em;font-weight:400;opacity:.7}
+.pr{text-align:right}.pr .o{font-size:1.25em;font-weight:800;color:var(--pa)}.pr .m{font-size:.62em;opacity:.75}.pr .m s{opacity:.8}
+.empty{text-align:center;opacity:.6;font-size:4cqw}.sec{grid-column:1/-1;display:flex;align-items:center;gap:2cqw;font-size:3.6cqw;font-weight:800;color:var(--pa);letter-spacing:.05em}.sec::before,.sec::after{content:'';flex:1;height:.3cqw;background:linear-gradient(90deg,transparent,var(--pa))}.sec::after{transform:scaleX(-1)}
+#poster .ft{text-align:center;font-size:3.4cqw;font-weight:700;padding:1.8cqw 3cqw;border:.2cqw solid var(--pd);border-radius:99px;background:var(--pc)}
+@media print{@page{size:A4;margin:0}body{padding:0;background:#fff}.panel,.wrap>.no{display:none!important}.wrap{display:block}#poster{width:210mm;height:297mm;box-shadow:none;aspect-ratio:auto;print-color-adjust:exact;-webkit-print-color-adjust:exact}#poster{font-size:calc(210mm/100)}}
+#poster.split{padding:0;background:var(--sr,#fff);color:#111}#poster.split::before,#poster.split::after{display:none}
+.sp{flex:1;min-height:0;display:flex}.spl{width:60%;background:var(--sl);color:var(--st);display:flex;flex-direction:column;padding:4cqw 3.5cqw 2cqw 5cqw;min-height:0}
+.sph{text-align:center;font-size:5.4cqw;font-weight:800;line-height:1.25;margin-bottom:2cqw}.sph small{display:block;color:var(--sa);font-size:4cqw;font-weight:600}
+.spf{display:flex;flex-direction:column;min-height:0}.rw{flex:1;min-height:0;display:flex;align-items:center;justify-content:space-between;gap:2cqw;font-weight:700}.rw .p{white-space:nowrap}.rw .p i{font-style:normal;font-weight:500;opacity:.9}
+.spph{height:26cqw;margin:2cqw 0 0;border-radius:2cqw;overflow:hidden;flex:none}.spph img{width:100%;height:100%;object-fit:cover}
+.pill{align-self:center;background:#fff;color:var(--sl);font-weight:800;font-size:4.6cqw;padding:.8cqw 8cqw;border-radius:2cqw;margin:2cqw 0 1.5cqw;flex:none}
+.spr{width:40%;display:flex;flex-direction:column;padding:4cqw 2cqw;text-align:center;min-height:0}.bk{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:hidden}
+.bf{flex:1;min-height:7cqw;width:100%;position:relative;margin-top:1cqw}.bf img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.bn{font-size:calc(8cqw*var(--ts,1));font-weight:800;color:var(--sn,var(--sl));line-height:1.1}.bl{display:flex;gap:2.5cqw;font-size:calc(5cqw*var(--ts,1));font-weight:800;color:var(--sp,#b3261e);justify-content:center;line-height:1.3}.bp{font-size:calc(8.5cqw*var(--ts,1));font-weight:800;color:var(--sp,#b3261e)}.be{font-size:13cqw;line-height:1.1}.spph2{flex:1.3;min-height:0}#poster>*{position:relative;z-index:1}#poster>.bgp{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;pointer-events:none}.lg{height:10cqw;max-width:30%;object-fit:contain}.hd .lg{display:block;margin:0 auto 1.5cqw;height:12cqw}.sft .lg{height:9cqw}
+
+
+#ov{position:fixed;inset:0;z-index:50;background:var(--bg);flex-direction:column;padding-top:env(safe-area-inset-top,0px);display:none}.ovh{display:flex;justify-content:space-between;align-items:center;padding:8px 12px}#ovp{height:50vh;display:flex;justify-content:center;padding:4px 12px;flex:none}#ovp #poster{height:100%;width:auto;max-width:100%;aspect-ratio:210/297}#ovc{flex:1;overflow:auto;padding:6px 12px calc(14px + env(safe-area-inset-bottom,0px))}
+.nn{display:flex;align-items:center;gap:.5em;min-width:0}.th{height:1.8em;width:1.8em;border-radius:50%;object-fit:cover;flex:none;border:.2cqw solid var(--sa)}.bi{flex:1;min-height:0;max-width:100%;object-fit:contain;margin-top:1cqw}.spph2 img{width:100%;height:100%;object-fit:contain}
+.sft{background:var(--sf);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:3cqw;padding:3cqw 5cqw;font-size:3.6cqw;font-weight:700;flex:none}.sft b{font-size:5.4cqw;color:var(--sa)}.sft span{text-align:right}
+:root{--bg:#f4efe4;--card:#fffdf8;--tx:#16202e;--mut:#6b6558;--bd:#e3d9c3;--ac:#0b2a4a;--gold:#c9a24a;--gold2:#8a6a1f}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#070d18;--card:#0f1a2c;--tx:#f1e9d6;--mut:#9aa6b8;--bd:#25354d;--ac:#d9b45a;--gold:#d9b45a;--gold2:#d9b45a}}
+body{background:radial-gradient(900px 380px at 50% -120px,rgba(201,162,74,.2),transparent),var(--bg)}
+.brand{max-width:1000px;margin:0 auto 14px;padding:16px 18px;border-radius:16px;background:linear-gradient(135deg,#0a1f3a,#14406e);color:#fff;border:1px solid rgba(217,180,90,.55);box-shadow:0 6px 20px rgba(0,0,0,.22)}
+.brand b{display:block;font-size:20px;letter-spacing:.3px;color:#f0cf7a}.brand span{font-size:12px;opacity:.85}
+.panel{border-radius:16px;border:1px solid var(--bd);border-top:3px solid var(--gold);box-shadow:0 4px 16px rgba(20,25,40,.1)}
+h2{color:var(--gold2);letter-spacing:.2px}
+button{border-radius:10px}
+button.p,.tabs button.on{background:linear-gradient(135deg,#f0cf7a,#bf9230);color:#1d1503;border-color:#a8842c;font-weight:700}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:0}
+.sug button:hover{border-color:var(--gold)}
+.themes button.on{border-color:var(--gold);box-shadow:0 0 0 2px var(--bg)}
+#poster{box-shadow:0 12px 32px rgba(0,0,0,.3)}
+@media print{.brand{display:none}}
+#poster [data-k],#poster [data-f]{cursor:pointer}#poster [data-k]:active,#poster [data-f]:active{outline:.4cqw dashed currentColor}
+#eh{text-align:center;font-size:12px;color:var(--mut);margin-top:8px}
+#es{display:none;position:fixed;inset:0;z-index:60;align-items:flex-end;pointer-events:none}.esb{pointer-events:auto;width:100%;max-width:520px;margin:0 auto;background:var(--card);color:var(--tx);border-radius:18px 18px 0 0;border-top:3px solid var(--gold);padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.35)}.esh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}.esh b{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.eg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.eb{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.eb button{font-size:13px;padding:8px 10px}
+@media print{#eh,#es{display:none!important}}
+
+/* ---- animated effects ---- */
+@keyframes up{from{opacity:0;transform:translateY(22px)}}
+@keyframes down{from{opacity:0;transform:translateY(-18px)}}
+@keyframes fl{50%{transform:translateY(-9px) rotate(7deg)}}
+@keyframes tsh{to{background-position:200% center}}
+@keyframes shine{0%{left:-60%}60%,100%{left:130%}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(201,162,74,.6)}50%{box-shadow:0 0 0 7px rgba(201,162,74,0)}}
+@keyframes ipop{from{opacity:0;transform:translateY(14px) scale(.92)}}
+@keyframes cpop{from{opacity:0;transform:scale(.8)}}
+@keyframes rp{to{transform:scale(1);opacity:0}}
+@keyframes swim{50%{transform:translateX(14px) rotate(8deg)}}
+@keyframes ldb{to{width:100%}}
+@keyframes ldo{to{opacity:0;visibility:hidden}}
+.brand{position:relative;overflow:hidden;background-size:100% 220%;background-position:0 var(--py,0px);animation:down .6s cubic-bezier(.2,.8,.2,1) both}
+.brand b{background:linear-gradient(90deg,#f0cf7a,#fff6d6,#f0cf7a);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:tsh 4s linear infinite}
+.brand i{position:absolute;font-style:normal;opacity:.4;animation:fl 6s ease-in-out infinite;translate:0 calc(var(--py,0px)*-.5);pointer-events:none}
+.brand .f1{right:16px;top:10px;font-size:30px}.brand .f2{right:70px;top:36px;font-size:18px;animation-delay:-2s}.brand .f3{right:112px;top:14px;font-size:16px;color:#f0cf7a;animation-delay:-4s}
+.no .panel{animation:up .6s cubic-bezier(.2,.8,.2,1) both}.no .panel:nth-child(2){animation-delay:.12s}.no .panel:nth-child(3){animation-delay:.24s}.stage{animation:up .7s .3s both}
+.panel{transition:box-shadow .3s,border-color .3s}
+button{position:relative;overflow:hidden;transition:transform .15s,filter .2s,box-shadow .2s}
+button:active{transform:scale(.95)}
+button.p::after{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);animation:shine 3.2s infinite;pointer-events:none}
+@media (hover:hover){.panel:hover{box-shadow:0 10px 28px rgba(201,162,74,.25);border-color:var(--gold)}button:hover{transform:translateY(-2px);filter:brightness(1.07)}.themes button:hover{transform:scale(1.18)}.sug button:hover{transform:translateY(-2px) scale(1.04)}}
+.themes button.on{animation:pulse 1.8s infinite}
+.sug button{animation:cpop .3s both}.sug button:nth-child(2){animation-delay:.03s}.sug button:nth-child(3){animation-delay:.06s}.sug button:nth-child(4){animation-delay:.09s}.sug button:nth-child(n+5){animation-delay:.12s}
+#rows .row:last-child{animation:up .35s both}
+.pop{animation:ipop .55s cubic-bezier(.2,1.4,.4,1) both}
+.rp{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:rp .6s ease-out;pointer-events:none}
+.stage,#ovp{perspective:1000px}#poster{transition:transform .2s ease-out,box-shadow .3s;will-change:transform}
+#ld{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,#071426,#123a66);display:flex;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s;animation:ldo 0s 3.5s forwards}#ld.out{opacity:0;visibility:hidden}
+.ldb{text-align:center;color:#f0cf7a;font-weight:700;letter-spacing:.3px}.ldf{font-size:52px;animation:swim 1.2s ease-in-out infinite}.ldbar{width:170px;height:4px;border-radius:4px;background:rgba(255,255,255,.15);margin:14px auto 0;overflow:hidden}.ldbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f0cf7a,#fff);animation:ldb 1s ease-out forwards}
+#tt{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(30px);background:#0a1f3a;color:#f0cf7a;border:1px solid rgba(217,180,90,.6);padding:9px 16px;border-radius:99px;font-size:14px;opacity:0;transition:.35s;z-index:70;pointer-events:none;white-space:nowrap}#tt.on{opacity:1;transform:translateX(-50%)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media print{*,*::before,*::after{animation:none!important;transition:none!important}#poster{transform:none!important}#ld,#tt{display:none!important}}
+.hd .lg{height:calc(12cqw*var(--lz,1))}.sph .lg{display:block;margin:0 auto 1.5cqw;height:calc(11cqw*var(--lz,1));max-width:60%}.sft .lg{height:calc(9cqw*var(--lz,1))}.ft .lg{height:calc(7cqw*var(--lz,1));vertical-align:middle;margin-right:2cqw;max-width:30%}#poster .lg{cursor:pointer}
+.sft span:only-child{margin:0 auto;text-align:center}
+#poster>.lgf{position:absolute;z-index:5;cursor:grab;touch-action:none;outline:.35cqw dashed rgba(255,255,255,.6);outline-offset:.5cqw}.lgf img{display:block;width:100%;height:auto;pointer-events:none;user-select:none;-webkit-user-drag:none}.lgf .rh{position:absolute;right:-2cqw;bottom:-2cqw;width:5cqw;height:5cqw;border-radius:50%;background:#f0cf7a;border:.4cqw solid #fff;cursor:nwse-resize;touch-action:none;box-shadow:0 .4cqw 1cqw rgba(0,0,0,.3)}
+@media print{.lgf{outline:none!important}.lgf .rh{display:none!important}}
+.lgf[data-f=photo] img{border-radius:1.2cqw;box-shadow:0 .6cqw 1.6cqw rgba(0,0,0,.3)}
+.mh{text-align:center;font-size:7.5cqw;font-weight:800;color:var(--sn,var(--sl));margin-bottom:3cqw;line-height:1.2}.mh small{display:block;font-size:4cqw;color:var(--sp,#b3261e);font-weight:600}.mg{flex:1;min-height:0;display:grid;grid-template-columns:repeat(var(--mc,1),minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:2.5cqw}.mg .bk{border:.4cqw solid var(--sl);border-radius:3cqw;background:rgba(0,0,0,.03)}
+.spf{flex:none}.rw{flex:none;height:2.1em;justify-content:flex-start}.rw .nn{width:52%;flex:none;min-width:0}.rw .p{flex:1;text-align:left}
+.pw{position:relative;margin:auto -3.5cqw 1.5cqw -5cqw;text-align:center;padding-top:1.2cqw}.pw::before{content:'';position:absolute;left:0;right:0;top:50%;height:.3cqw;background:#fff;opacity:.9}.pw .pill{display:inline-block;position:relative;margin:0}
+.sft{min-height:23cqw;justify-content:space-between;padding:2.5cqw 4cqw}.sft .fr{width:58%;margin-left:auto;text-align:center;line-height:1.28}.fd{color:var(--sa);font-size:3.9cqw;font-weight:800}.fp{font-size:6.4cqw;font-weight:500;letter-spacing:.02em}.fa{font-size:3.4cqw;font-weight:700}
+.rw{height:1.85em}
+.bl{white-space:nowrap;font-size:calc(4cqw*var(--ts,1));gap:1.5cqw}.bp{white-space:nowrap;font-size:calc(6.6cqw*var(--ts,1))}.bn{font-size:calc(7.5cqw*var(--ts,1))}
+.sft .fp{font-size:5.2cqw;white-space:nowrap}.sft .fd{font-size:3.6cqw}.sft .fa{font-size:3cqw}.sft .fr{width:60%}
+</style></head><body><div id="ld"><div class="ldb"><div class="ldf">🐟</div><div>Fish Poster Studio</div><div class="ldbar"><i></i></div></div></div>
+<header class="brand"><b>🐟 Fish Poster Studio</b><i class="f1">🐟</i><i class="f2">🫧</i><i class="f3">✦</i><span>Premium daily price poster maker • Fish • Meat • Piece Meen</span></header>
+<div class="wrap">
+<div class="no">
+<div class="panel"><h2>🐟 ചേർക്കാം</h2><div class="tabs" id="tabs"></div>
+<input id="q" placeholder="മീനിന്റെ പേര് type ചെയ്യൂ (neymeen, mathi, ചെമ്മീൻ…)" autocomplete="off">
+<div class="sug" id="sug"></div><div id="msp"></div></div>
+<div class="panel" style="margin-top:14px"><h2>Poster details</h2>
+<input id="shop" type="hidden" value="">
+<label>Title</label><input id="title" value="ഇന്നത്തെ മീൻ വില">
+<label>Date</label><input id="date" type="date">
+<label>🐟 Fish photo (poster-il drag cheythu vekkam)</label><input id="ph1" type="file" accept="image/*"><label>🥩 Meat photo (drag cheythu vekkam)</label><input id="ph2" type="file" accept="image/*">
+<label>🖼 Banner / background photo (live preview)</label><input id="ph3" type="file" accept="image/*"><label>Photo strength</label><input id="bo" type="range" min="10" max="100" value="35" style="padding:0">
+<label>🏷 Logo (kadayude logo – save aayirikkum)</label><input id="ph4" type="file" accept="image/*">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label>Logo size</label><input id="ls" type="range" min="20" max="300" value="100" style="padding:0"></div><div><label>Position</label><select id="lp"><option value="free">✋ Manual (drag cheythu vekkuka)</option><option value="auto">Auto</option><option value="top">Top (title-nu mukalil)</option><option value="bottom">Bottom (footer)</option></select></div></div>
+<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button onclick="PH.ph4=null;$('ph4').value='';draw()">✕ Logo remove</button><button onclick="PH.ph3=null;$('ph3').value='';draw()">✕ Background remove</button></div>
+<label>Footer</label><input id="foot" value="📞 98765 43210 • ഫ്രഷ് മീൻ ദിവസവും">
+<label>🛵 Delivery text (footer)</label><input id="fd" value="HOME DELIVERY"><label>📞 Phone</label><input id="fp" value="+91 903 7567 641"><label>📍 Address</label><input id="fa" value="SM BUILDING, Near Govt. Hospital, Sastri Jn.,Kunnicode, 691508">
+<label>Theme</label><div class="themes" id="th"></div>
+<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button onclick="delTheme()">🗑 Selected theme delete</button><button onclick="try{localStorage.removeItem('fpH')}catch(e){}location.reload()">↺ Deleted themes thirichu kondu varuka</button></div>
+<details style="margin-top:10px"><summary style="cursor:pointer;font-size:14px">➕ Custom theme add cheyyuka</summary>
+<button class="p" onclick="ovOpen()" style="margin-top:10px;width:100%">👁 Preview screen (live)</button>
+<div id="cbh"><div id="cb"><div class="cg"><div><label>Background 1</label><input type="color" id="c1" value="#0b3d2e"></div><div><label>Background 2</label><input type="color" id="c2" value="#031a13"></div><div><label>Text</label><input type="color" id="c3" value="#ffffff"></div><div><label>Accent (title / price)</label><input type="color" id="c4" value="#ffd24a"></div></div>
+<label>Layout</label><select id="cl"><option value="">Card list</option><option value="split">Split (left list + right meat + footer)</option></select>
+<label>Theme name</label><input id="cn" placeholder="My theme">
+<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="p" onclick="addTheme()">Add theme</button><button onclick="delTheme()">Selected custom theme delete</button></div></div></div></details></div>
+<div class="panel" style="margin-top:14px"><h2>വില (MRP / Offer, ₹ per kg)</h2>
+<div class="row"><b>പേര്</b><b>MRP</b><b>Offer</b><b></b></div><div id="rows"></div>
+<div style="display:flex;gap:8px;margin-top:12px"><button class="p" onclick="window.print()">🖨 Print / Save PDF (A4)</button><button onclick="loadSample()">✨ Sample</button><button onclick="items=[];draw();rows()">Clear</button></div></div>
+</div>
+<div class="stage"><div id="poster"></div></div>
+</div>
+<script>
+var F=[["അയക്കൂറ","neymeen ayakura","Seer fish","🐟"],["മത്തി","mathi chala","Sardine","🐟"],["അയല","ayala","Mackerel","🐟"],["ചെമ്മീൻ","chemmeen","Prawn","🦐"],["കൊഴുവ","kozhuva nethili","Anchovy","🐟"],["ആവോലി","avoli","Pomfret","🐟"],["കരിമീൻ","karimeen","Pearl spot","🐠"],["ചൂര","choora","Tuna","🐟"],["കണവ","kanava","Squid","🦑"],["ഞണ്ട്","njandu","Crab","🦀"],["നത്തോലി","nathholi","Small anchovy","🐟"],["മാന്തൾ","manthal","Cuttlefish","🦑"],["കിളിമീൻ","kilimeen","Threadfin bream","🐠"],["തിരുത","thiruta","Mullet","🐟"],["പാര","paara","Trevally","🐟"],["വറ്റ","vatta","Trevally","🐟"],["ചെമ്പല്ലി","chembally","Snapper","🐟"],["മോദ","moda","Bullseye","🐟"],["ചൂടൻ","choodan","Lizardfish","🐟"],["ഏട്ട","etta","Catfish","🐟"],["കാളാഞ്ചി","kalanji","Barramundi","🐟"],["മുള്ളൻ","mullan","Pufferfish","🐡"],["സ്രാവ്","sravu mushi","Shark","🦈"],["കക്ക","kakka","Clam","🐚"],["കല്ലുമ്മക്കായ","kallummakkaya","Mussel","🐚"],["ആകോലി","akoli","Barracuda","🐟"],["വാള","vala","Ribbon fish","🐟"],["നെത്തോലി","nethili","Anchovy","🐟"],["തിലാപ്പിയ","tilapia","Tilapia","🐟"],["രോഹു","rohu","Rohu","🐟"],["കട്‌ല","catla","Catla","🐟"],["ചാള","chala","Sardine","🐟"]];
+var T=[['Royal Navy','#08224a','#ffffff','#f5c76a','rgba(255,255,255,.08)','rgba(245,199,106,.45)','radial-gradient(circle at 12% 0,#1a5c9a 0,transparent 55%),radial-gradient(circle at 100% 100%,#0e4478 0,transparent 50%),linear-gradient(160deg,#08224a,#03101f)'],['Black Gold','#14100a','#f6ecd0','#e6b94d','rgba(230,185,77,.09)','rgba(230,185,77,.5)','radial-gradient(circle at 50% 0,#33280f 0,#0c0b09 65%)'],['Emerald','#0b4a39','#effff7','#7df0b8','rgba(255,255,255,.08)','rgba(125,240,184,.4)','radial-gradient(circle at 85% 0,#14795c 0,transparent 55%),linear-gradient(165deg,#0b4a39,#03201a)'],['Offer Red','#c4102b','#ffffff','#ffe14d','rgba(0,0,0,.22)','rgba(255,225,77,.55)','radial-gradient(circle at 50% 0,#ff4a5f 0,transparent 60%),linear-gradient(160deg,#d8142f,#7d0016)'],['Sunset','#f08a5d','#3a1405','#b83200','rgba(255,255,255,.6)','rgba(184,50,0,.3)','linear-gradient(165deg,#fff1d6,#ffc68c 55%,#f4906a)'],['Pearl','#e7eef8','#10243f','#0a5bd6','#ffffff','rgba(10,91,214,.22)','linear-gradient(160deg,#ffffff,#dfe9f7)'],['Rose','#ffc8dc','#4a0d2a','#c21860','rgba(255,255,255,.7)','rgba(194,24,96,.3)','linear-gradient(160deg,#fff4f8,#ffc6db)'],['Aqua','#014d63','#e9ffff','#5ff5e1','rgba(255,255,255,.09)','rgba(95,245,225,.4)','linear-gradient(170deg,#032235,#01566b 60%,#00867f)']];var T0=[["Ocean","#06304f","#ffffff","#ffd23f","#0b4a75","#06304f"],["Sunset","#fff3e0","#4a1d00","#e8590c","#ffe0b2",""],["Green","#0f3d2e","#f1fff8","#7CFC9a","#16573f",""],["Red Offer","#b3001b","#fff","#ffe14d","#d01a36",""],["Dark","#111","#f5f5f5","#00e0b0","#1f1f1f",""],["Light","#ffffff","#12233a","#0a6cff","#eef3f9",""],["Gold","#1c1405","#fff6dc","#ffc933","#2d2209",""],["Pink","#fff0f5","#4a0d2a","#d6246e","#ffd9e8",""]];
+var items=[],ti=0,$=function(i){return document.getElementById(i)};
+F.forEach(function(f){f[4]=f[4]||'fish'});
+F.push(['കേര പീസ്','kera piece','Kera (piece)','🐟','piece'],['മോദ പീസ്','moda modha piece','Moda (piece)','🐟','piece'],['നെയ്മീൻ പീസ്','neymeen ayakura seer piece','Neymeen (piece)','🐟','piece'],['ചൂര പീസ്','choora piece','Tuna (piece)','🐟','piece'],['ചെമ്പല്ലി പീസ്','chembally piece','Snapper (piece)','🐟','piece'],['കാളാഞ്ചി പീസ്','kalanji piece','Barramundi (piece)','🐟','piece'],['വറ്റ പീസ്','vatta piece','Trevally (piece)','🐟','piece'],['ആവോലി പീസ്','avoli piece','Pomfret (piece)','🐟','piece'],['ചിക്കൻ ഇറച്ചി','chicken meat irachi','Chicken meat','🍗','meat'],['ചിക്കൻ ലൈവ്','chicken live kozhi','Chicken live','🐔','meat'],['പോത്ത്','pothu buffalo','Pothu (buffalo)','🐃','meat'],['ബീഫ്','beef pashu','Beef','🐄','meat'],['മട്ടൻ','mutton aadu','Mutton','🐐','meat']);
+var C=[['all','എല്ലാം'],['fish','🐟 Fish'],['piece','🔪 Piece Meen'],['meat','🥩 Meat']],cat='all',TT={fish:'ഇന്നത്തെ മീൻ വില',piece:'ഇന്നത്തെ പീസ് മീൻ വില',meat:'ഇന്നത്തെ ഇറച്ചി വില'};
+function tabs(){$('tabs').innerHTML=C.map(function(c){return '<button class="'+(c[0]==cat?'on':'')+'" onclick="setCat(\''+c[0]+'\')">'+c[1]+'</button>'}).join('')}
+function setCat(c){var v=$('title').value,isDef=v==='ഇന്നത്തെ മീൻ വില'||Object.keys(TT).some(function(k){return TT[k]===v});cat=c;if(isDef&&TT[c])$('title').value=TT[c];tabs();sug();draw()}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var d=new Date();$("date").value=d.toISOString().slice(0,10);
+function thr(){$("th").innerHTML=T.map(function(t,i){return'<button title="'+esc(t[0])+'" onclick="ti='+i+';draw()" style="background:linear-gradient(135deg,'+t[1]+' 50%,'+t[3]+' 50%)"></button>'}).join("")}
+function hx(h,a){return'rgba('+parseInt(h.slice(1,3),16)+','+parseInt(h.slice(3,5),16)+','+parseInt(h.slice(5,7),16)+','+a+')'}
+function saveT(){try{localStorage.setItem('fpT',JSON.stringify(T.filter(function(t){return t[7]})))}catch(e){}}
+function addTheme(){var a=$('c1').value,b=$('c2').value,x=$('c3').value,y=$('c4').value;T.push([$('cn').value||'Custom '+(T.length+1),a,x,y,hx(x,.1),hx(y,.5),'linear-gradient(160deg,'+a+','+b+')',1]);ti=T.length-1;saveT();$('cn').value='';thr();draw()}
+function delTheme(){if(T.length<2)return;var t=T[ti];if(!t[7]){try{var h=JSON.parse(localStorage.getItem('fpH')||'[]');h.push(t[0]);localStorage.setItem('fpH',JSON.stringify(h))}catch(e){}}T.splice(ti,1);ti=0;saveT();thr();draw()}
+try{JSON.parse(localStorage.getItem('fpT')||'[]').forEach(function(t){T.push(t)})}catch(e){}
+thr();
+function sug(){var q=$("q").value.trim().toLowerCase();var l=F.filter(function(f){return(cat=="all"||f[4]==cat)&&(!q||f.slice(0,4).join(" ").toLowerCase().indexOf(q)>-1)});
+l.sort(function(a,b){var x=a[0].toLowerCase().indexOf(q)==0||a[1].indexOf(q)==0?0:1,y=b[0].toLowerCase().indexOf(q)==0||b[1].indexOf(q)==0?0:1;return x-y});
+$("sug").innerHTML=l.slice(0,40).map(function(f){var i=F.indexOf(f);return'<button onclick="add('+i+')">'+f[3]+" "+f[0]+" <small>"+f[2]+"</small></button>"}).join("")||'<button onclick="addCustom()">+ "'+esc($("q").value)+'" ചേർക്കുക</button>'}
+$("q").oninput=sug;$("q").onkeydown=function(e){if(e.key=="Enter"){var b=$("sug").querySelector("button");if(b)b.click()}};
+function add(i){var f=F[i];if(items.some(function(x){return x.i==i}))return;items.push({i:i,c:f[4],n:f[0],e:f[2],em:f[3],m:"",o:""});$("q").value="";sug();draw();rows()}
+function addCustom(){var n=$("q").value.trim();if(!n)return;items.push({i:-1,c:cat=="all"?"fish":cat,n:n,e:"",em:"🐟",m:"",o:""});$("q").value="";sug();draw();rows()}
+function rows(){$("rows").innerHTML=items.map(function(x,k){return'<div class="row"><input value="'+esc(x.n)+'" oninput="items['+k+'].n=this.value;draw(1)"><input type="text" inputmode="text" value="'+esc(x.m)+'" placeholder="MRP" oninput="items['+k+'].m=this.value;draw(1)"><input type="text" inputmode="text" value="'+esc(x.o)+'" placeholder="Offer" oninput="items['+k+'].o=this.value;draw(1)"><button onclick="pickPhoto('+k+')" style="padding:4px" title="Photo">'+(x.p?'✅':'📷')+'</button><button onclick="items.splice('+k+',1);draw();rows()" style="padding:4px">✕</button></div>'}).join("")}
+function draw(keep){var t=T[ti],p=$("poster");p.style.cssText="--pb:"+t[6]+";--pt:"+t[2]+";--pa:"+t[3]+";--pc:"+t[4]+";--pd:"+t[5];
+[].forEach.call($("th").children,function(b,i){b.className=i==ti?"on":""});
+var dt=$("date").value?new Date($("date").value).toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"}):"";
+var n=items.length,c=n>24?3:n>10?2:1,G=[['fish','മീൻ • FISH'],['meat','ഇറച്ചി • MEAT'],['piece','പീസ് മീൻ • PIECE MEEN']].map(function(g){return{k:g[0],h:g[1],a:items.filter(function(x){return(x.c||'fish')==g[0]})}}).filter(function(g){return g.a.length}),hd=G.length>1,tr=[],r=0;G.forEach(function(g){if(hd){tr.push('minmax(0,.6fr)');r+=.6}var k=Math.ceil(g.a.length/c);for(var j=0;j<k;j++)tr.push('minmax(0,1fr)');r+=k});var mn=c==1?6:5;if(r<mn)tr.push('minmax(0,'+(mn-r)+'fr)');r=Math.max(r,mn);var sc=Math.min(Math.min(1,8.7/r),c==1?1:c==2?.62:.42);
+p.innerHTML='<div class="hd">'+($("shop").value?'<div class="shop" data-f="shop">'+esc($("shop").value)+'</div>':'')+'<div class="ttl" data-f="title">'+esc($("title").value)+'</div><div class="dt" data-f="date">'+dt+'</div></div><div class="ls" style="--c:'+c+';--s:'+sc+';grid-template-rows:'+tr.join(' ')+'">'+(n?G.map(function(g){return(hd?'<div class="sec">'+g.h+'</div>':'')+g.a.map(function(x){var pr=x.o?'<div class="o">₹'+esc(x.o)+'</div>'+(x.m?'<div class="m">MRP <s>₹'+esc(x.m)+'</s></div>':""):'<div class="o">'+(x.m?"₹"+esc(x.m):"")+'</div><div class="m">per kg</div>';return'<div class="it" data-k="'+items.indexOf(x)+'"><span class="em">'+(x.p&&!x.fm?'<img src="'+x.p+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">':x.em)+'</span><div class="nm">'+esc(x.n)+'<small>'+esc(x.e)+'</small></div><div class="pr">'+pr+'</div></div>'}).join("")}).join(""):'<div class="empty">മുകളിൽ മീനിന്റെ പേര് type ചെയ്ത് ചേർക്കൂ</div>')+'</div><div class="ft" data-f="foot">'+esc($("foot").value)+'</div>'}
+["shop","title","date","foot"].forEach(function(i){$(i).oninput=function(){draw()}});tabs();
+sug();draw();
+T.splice(8,0,['Shop Split','#2b2d8f','#ffffff','#ffe933','','','',0,'split','#1b6a35'],
+['BSR Purple','#6b3aa0','#ffffff','#ffe24a','','','',0,'split','#1b6a35','#ffffff','#1b6a35','#5b2d8e'],
+['Split Maroon','#7a0f2b','#ffffff','#ffd56b','','','',0,'split','#3f0716','#fff7ea','#b3001b','#7a0f2b'],
+['Split Black Gold','#121212','#f6ecd0','#e6b94d','','','',0,'split','#000000','#fbf6e8','#9a6b00','#121212'],
+['Split Emerald','#0b5a41','#ffffff','#ffe27a','','','',0,'split','#06372a','#f2fff8','#b3261e','#0b5a41'],
+['Split Teal','#035e6e','#ffffff','#7ff3e1','','','',0,'split','#022f38','#effcfd','#d9480f','#035e6e'],
+['Split Orange','#c2410c','#ffffff','#fff0a8','','','',0,'split','#7c2605','#fff8f0','#9a1c00','#c2410c'],
+['Split Purple','#3b1f78','#ffffff','#ffe066','','','',0,'split','#22104a','#f7f2ff','#b3261e','#3b1f78'],
+['Split Red Offer','#b3001b','#ffffff','#ffe14d','','','',0,'split','#5e000d','#ffffff','#b3001b','#b3001b'],
+['Split Royal Navy','#0b2a5b','#ffffff','#f5c76a','','','',0,'split','#071a38','#f4f8ff','#a4161a','#0b2a5b']);try{var H=JSON.parse(localStorage.getItem('fpH')||'[]');for(var q=T.length-1;q>=0;q--)if(!T[q][7]&&H.indexOf(T[q][0])>-1)T.splice(q,1)}catch(e){}ti=Math.max(0,T.findIndex(function(t){return t[0]=='BSR Purple'}));thr();
+var _a=addTheme;addTheme=function(){_a();var t=T[T.length-1];t[8]=$('cl').value;t[9]=$('c2').value;saveT();thr();draw()};
+var PH={};['ph1','ph2'].forEach(function(id){$(id).onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){PH[id]=r.result;draw()};r.readAsDataURL(f)}});
+var pk=-1,pf=document.createElement('input');pf.type='file';pf.accept='image/*';pf.style.display='none';document.body.appendChild(pf);
+function pickPhoto(k){pk=k;pf.value='';pf.click()}
+pf.onchange=function(){var f=pf.files[0];if(!f||pk<0||!items[pk])return;var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,700/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);var it=items[pk];setDefPos(it,pk);it.p=c.toDataURL('image/jpeg',.85);it.fm=true;draw();rows();if($('es').style.display=='flex')esItem(pk)};im.src=r.result};r.readAsDataURL(f)};
+function ph(x,em){return x&&x.p?(x.fm?'':'<div class="bf"><img src="'+x.p+'"></div>'):(PH.ph2?'':'<div class="be">'+em+'</div>')}
+function pr2(x){var v=x.o||x.m;return v?'₹'+esc(v):''}
+function drawSplit(t){var p=$('poster'),g=function(k){return items.filter(function(x){return(x.c||'fish')==k})},F1=g('fish'),P1=g('piece'),M1=g('meat');
+p.className='split';var bgs=PH.ph3?';background-image:linear-gradient('+hx(t[1],1-$('bo').value/100)+','+hx(t[1],1-$('bo').value/100)+'),url('+PH.ph3+');background-size:cover;background-position:center':'';p.style.cssText='--sl:'+t[1]+';--st:'+t[2]+';--sa:'+t[3]+';--sf:'+(t[9]||'#1b6a35')+';--sr:'+(t[10]||'#fff')+';--sp:'+(t[11]||'#b3261e')+';--sn:'+(t[12]||t[1]);
+[].forEach.call($('th').children,function(b,i){b.className=i==ti?'on':''});
+var dt=$('date').value?new Date($('date').value).toLocaleDateString('en-GB'):'';
+var R=Math.max(F1.length+P1.length,6),av=90-(P1.length?10:0),fs=Math.min(4.6,av/(R*1.85));
+var rows=function(a){return'<div class="spf">'+a.map(function(x){var pp=x.o||x.m;return'<div class="rw" data-k="'+items.indexOf(x)+'"><span class="nn">'+(x.p&&!x.fm?'<img class="th" src="'+x.p+'">':'')+esc(x.n)+'</span><span class="p">'+(x.o&&x.m?'<s style="opacity:.6;font-size:.8em">₹'+esc(x.m)+'</s> ':'')+(pp?'₹ '+esc(pp)+'<i> &nbsp;/ kg</i>':'')+'</span></div>'}).join('')+'</div>'};
+var L='<div class="sph" data-f="title">'+(PH.ph4&&lpos(1)=='top'?'<img class="lg" data-f="logo" src="'+PH.ph4+'">':'')+esc($('title').value)+'<small data-f="date">('+dt+')</small></div>'+(items.length?'':'<div style="margin:auto;text-align:center;opacity:.8;font-size:4cqw">+ മീൻ add ചെയ്യൂ</div>')+(F1.length?rows(F1):'')+''+(P1.length?'<div class="pw"><div class="pill">പീസ് മീൻ</div></div>'+rows(P1):'');
+var cl=M1.filter(function(x){return x.e=='Chicken live'})[0],cm=M1.filter(function(x){return x.e=='Chicken meat'})[0],B=[];
+if(cl||cm)B.push('<div class="bk" data-k="'+items.indexOf(cl||cm)+'"><div class="bn">ചിക്കൻ</div>'+(cl?'<div class="bl" data-k="'+items.indexOf(cl)+'"><span>LIVE</span><span>'+pr2(cl)+'/-KG</span></div>':'')+(cm?'<div class="bl" data-k="'+items.indexOf(cm)+'"><span>MEAT</span><span>'+pr2(cm)+'/-KG</span></div>':'')+ph(cl&&cl.p?cl:cm,'🍗')+'</div>');
+M1.forEach(function(x){if(x===cl||x===cm)return;B.push('<div class="bk" data-k="'+items.indexOf(x)+'"><div class="bn">'+esc(x.n)+'</div><div class="bp">'+pr2(x)+'/-KG</div>'+ph(x,x.em)+'</div>')});
+var oM=!F1.length&&!P1.length&&M1.length,mc=B.length>2?2:1,mr=Math.ceil(B.length/mc),mt=Math.min(1.5,Math.max(.5,100/mr*.45/18));p.innerHTML=(oM?'<div class="sp"><div class="spr" style="width:100%;--ts:'+mt+';padding:5cqw 5cqw 3cqw"><div class="mh" data-f="title">'+esc($('title').value)+'<small data-f="date">('+dt+')</small></div><div class="mg" style="--mc:'+mc+'">'+B.join('')+'</div></div></div>':'<div class="sp"><div class="spl" style="font-size:'+fs+'cqw'+bgs+'">'+L+'</div><div class="spr" style="--ts:'+Math.min(1,3.2/Math.max(B.length,1))+'">'+B.join('')+''+'</div></div>')+'<div class="sft">'+(PH.ph4&&lpos(1)=='bottom'?'<img class="lg" data-f="logo" src="'+PH.ph4+'">':'')+sFr()+'</div>'}
+function sFr(){var a=$('fd').value,b=$('fp').value,c=$('fa').value;if(!a&&!b&&!c)return'<span data-f="foot" style="margin:0 auto">'+esc($('foot').value)+'</span>';return'<div class="fr">'+(a?'<div class="fd" data-f="fd">🛵 '+esc(a)+'</div>':'')+(b?'<div class="fp" data-f="fp">'+esc(b)+'</div>':'')+(c?'<div class="fa" data-f="fa">'+esc(c)+'</div>':'')+'</div>'}
+function rs(f,m,cb){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL(f.type=='image/png'?'image/png':'image/jpeg',.85))};im.src=r.result};r.readAsDataURL(f)}
+[['ph3',1200],['ph4',500]].forEach(function(a){$(a[0]).onchange=function(){var f=this.files[0];if(f)rs(f,a[1],function(u){PH[a[0]]=u;draw()})}});
+$('bo').oninput=function(){draw()};
+var _d=draw;draw=function(){var t=T[ti];if(t[8]=='split'){drawSplit(t)}else{var p=$('poster');p.className='';_d.apply(null,arguments);if(PH.ph3)p.insertAdjacentHTML('afterbegin','<div class="bgp" style="background-image:url('+PH.ph3+');opacity:'+($('bo').value/100)+'"></div>');if(PH.ph4&&lpos(0)!='free'){var bt=lpos(0)=='bottom';p.querySelector(bt?'.ft':'.hd').insertAdjacentHTML('afterbegin','<img class="lg" data-f="logo" src="'+PH.ph4+'">')}}};
+document.body.insertAdjacentHTML('beforeend','<div id="ov"><div class="ovh"><b>👁 Theme preview (live)</b><button onclick="ovClose()">✕ Close</button></div><div id="ovp"></div><div id="ovc"></div></div>');
+var ovOn=false,ovTi=0;
+function dft(){var a=$('c1').value,b=$('c2').value,x=$('c3').value,y=$('c4').value;return['Draft',a,x,y,hx(x,.1),hx(y,.5),'linear-gradient(160deg,'+a+','+b+')',1,$('cl').value,b]}
+function ovDraw(){if(!ovOn)return;T[T.length-1]=dft();ti=T.length-1;draw()}
+function ovBack(){$('ov').style.display='none';document.querySelector('.stage').appendChild($('poster'));$('cbh').appendChild($('cb'))}
+function ovOpen(){ovTi=ti;T.push(dft());ovOn=true;$('ov').style.display='flex';$('ovp').appendChild($('poster'));$('ovc').appendChild($('cb'));ovDraw()}
+function ovClose(){ovOn=false;T.pop();ti=ovTi<T.length?ovTi:0;ovBack();draw()}
+['c1','c2','c3','c4','cl'].forEach(function(id){$(id).addEventListener('input',ovDraw);$(id).addEventListener('change',ovDraw)});
+var _a2=addTheme;addTheme=function(){if(ovOn){T.pop();ovOn=false;ovBack()}_a2()};
+var _dl=delTheme;delTheme=function(){if(!ovOn)_dl()};
+document.body.insertAdjacentHTML('beforeend','<div id="es"><div class="esb"><div class="esh"><b id="est">✏️ Edit</b><button class="p" onclick="esClose()">✓ Done</button></div><div id="esx"></div></div></div>');
+$('poster').insertAdjacentHTML('afterend','<div id="eh">✏️ Poster-il ethengilum tap cheythu edit cheyyam</div>');
+function esClose(){$('es').style.display='none'}
+function esItem(k){var x=items[k];if(!x)return;$('est').textContent='✏️ Edit: '+x.n;$('esx').innerHTML='<label>Name</label><input id="en" value="'+esc(x.n)+'"><div class="eg"><div><label>MRP</label><input id="em" type="text" inputmode="text" value="'+esc(x.m)+'"></div><div><label>Offer</label><input id="eo" type="text" inputmode="text" value="'+esc(x.o)+'"></div></div>'+(x.p?'<label>Photo size</label><input id="efw" type="range" min="5" max="95" value="'+(x.fw||20)+'" style="padding:0">':'')+'<div class="eb"><button onclick="pickPhoto('+k+')">📷 Photo</button>'+(x.p?'<button onclick="var q=items['+k+'];q.fm=!q.fm;if(q.fm&&q.fx==null)setDefPos(q,'+k+');draw();rows();esItem('+k+')">'+(x.fm?'✋ Manual ON':'✋ Manual OFF')+'</button><button onclick="items['+k+'].p=null;draw();rows();esItem('+k+')">✕ Photo remove</button>':'')+'<button onclick="items.splice('+k+',1);draw();rows();esClose()">🗑 Delete</button></div>';[['en','n'],['em','m'],['eo','o']].forEach(function(a){$(a[0]).oninput=function(){items[k][a[1]]=this.value;draw();rows()}});if($('efw'))$('efw').oninput=function(){items[k].fw=+this.value;draw()};$('es').style.display='flex'}
+function esField(f){var L={shop:'Kadayude peru',title:'Title',date:'Date',foot:'Footer (phone / address)',fd:'Delivery text',fp:'Phone',fa:'Address'};$('est').textContent='✏️ Edit';$('esx').innerHTML='<label>'+L[f]+'</label><input id="ef" type="'+(f=='date'?'date':'text')+'" value="'+esc($(f).value)+'">';$('ef').oninput=function(){$(f).value=this.value;draw()};$('es').style.display='flex'}
+$('poster').onclick=function(e){if(moved){moved=0;return}var t=e.target.closest('[data-k],[data-f]');if(!t)return;if(t.dataset.k!==undefined&&+t.dataset.k>=0)esItem(+t.dataset.k);else if(t.dataset.f=='logo')esLogo();else if(t.dataset.f=='photo')esPhoto(t.dataset.t);else if(t.dataset.f)esField(t.dataset.f)};
+document.body.insertAdjacentHTML('beforeend','<div id="tt"></div>');
+function toast(m){var t=$('tt');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('on')},1500)}
+var _ad=add;add=function(i){var had=items.some(function(x){return x.i==i});_ad(i);if(!had)toast('✓ '+F[i][0]+' add cheythu')};
+var lastN=0;function animNew(){var n=items.length;if(n>lastN){var P=$('poster');for(var k=lastN;k<n;k++){[].forEach.call(P.querySelectorAll('[data-k="'+k+'"]'),function(el){el.classList.add('pop')})}}lastN=n}
+function lpos(sp){var v=$('lp').value;return v=='auto'?(sp?'bottom':'top'):v}
+var lastLogo=null;try{var sv=localStorage.getItem('fpL');if(sv){PH.ph4=sv;lastLogo=sv}}catch(e){}
+var _d3=draw;draw=function(){_d3.apply(null,arguments);flAll();$('poster').style.setProperty('--lz',$('ls').value/100);if(PH.ph4!==lastLogo&&(PH.ph4||lastLogo)){lastLogo=PH.ph4;try{localStorage.setItem('fpL',PH.ph4||'')}catch(e){}}animNew()};
+['ls','lp'].forEach(function(id){$(id).addEventListener('input',function(){draw()});$(id).addEventListener('change',function(){draw()})});
+function esLogo(){$('est').textContent='✏️ Logo';$('esx').innerHTML='<label>Logo size</label><input id="el" type="range" min="20" max="300" value="'+$('ls').value+'" style="padding:0"><label>Position</label><select id="ep"><option value="free">Manual (drag)</option><option value="auto">Auto</option><option value="top">Top</option><option value="bottom">Bottom</option></select><p style="font-size:12px;color:var(--mut);margin:8px 0 0">✋ Manual: poster-il logo drag cheythu evideyum vekkam. Kona-ile manja vattam valichu valuppam maattam.</p><div class="eb"><button onclick="$(\'ph4\').click()">📷 Change logo</button><button onclick="PH.ph4=null;draw();esClose()">✕ Remove</button></div>';$('ep').value=$('lp').value;$('el').oninput=function(){$('ls').value=this.value;draw()};$('ep').onchange=function(){$('lp').value=this.value;draw()};$('es').style.display='flex'}
+document.addEventListener('pointerdown',function(e){var b=e.target.closest&&e.target.closest('button');if(!b)return;var r=b.getBoundingClientRect(),d=Math.max(r.width,r.height)*1.3,s=document.createElement('span');s.className='rp';s.style.cssText='width:'+d+'px;height:'+d+'px;left:'+(e.clientX-r.left-d/2)+'px;top:'+(e.clientY-r.top-d/2)+'px';b.appendChild(s);setTimeout(function(){s.remove()},650)});
+document.addEventListener('pointermove',function(e){if(DR)return;var p=$('poster'),r=p.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom){if(p.style.transform)p.style.transform='';return}var x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;p.style.transform='rotateY('+(x*8).toFixed(2)+'deg) rotateX('+(-y*8).toFixed(2)+'deg)'});
+['pointerup','pointercancel'].forEach(function(t){document.addEventListener(t,function(){$('poster').style.transform=''})});
+var br=document.querySelector('.brand');window.addEventListener('scroll',function(){br.style.setProperty('--py',((window.scrollY||0)*.25)+'px')},{passive:true});
+setTimeout(function(){var l=$('ld');if(!l)return;l.classList.add('out');setTimeout(function(){l.remove()},600)},1100);
+var LX=null,LY=null,DR=0,moved=0,PP={ph1:{x:5,y:26,w:50},ph2:{x:58,y:40,w:36}};
+try{var spp=JSON.parse(localStorage.getItem('fpP')||'null');if(spp){LX=spp[0];LY=spp[1];if(spp[2])$('ls').value=spp[2]}}catch(e){}
+function lg(){var sp=T[ti]&&T[ti][8]=='split',w=22*$('ls').value/100;if(LX==null)return sp?{x:3,y:85.5,w:w*1.23}:{x:6,y:2,w:w};return{x:LX,y:LY,w:w}}
+function saveP(){try{localStorage.setItem('fpP',JSON.stringify([LX,LY,$('ls').value]))}catch(e){}}
+function fl(t,src,x,y,w){return'<div class="lgf" data-f="'+(t=='logo'?'logo':'photo')+'" data-t="'+t+'" style="left:'+x+'%;top:'+y+'%;width:'+w+'cqw"><img src="'+src+'"><span class="rh"></span></div>'}
+function flAll(){var h='';items.forEach(function(x,k){if(x.p&&x.fm)h+=fl('i:'+k,x.p,x.fx||0,x.fy||0,x.fw||20)});['ph1','ph2'].forEach(function(id){if(PH[id])h+=fl(id,PH[id],PP[id].x,PP[id].y,PP[id].w)});if(PH.ph4&&lpos(0)=='free')h+=fl('logo',PH.ph4,lg().x,lg().y,lg().w);if(h)$('poster').insertAdjacentHTML('beforeend',h)}
+function getT(t){if(t=='logo'){var d=lg();return{x:d.x,y:d.y,w:d.w}}if(t.charAt(0)=='i'){var i=items[+t.slice(2)];return{x:i.fx||0,y:i.fy||0,w:i.fw||20}}return{x:PP[t].x,y:PP[t].y,w:PP[t].w}}
+function setT(t,x,y,w){if(t=='logo'){var d=lg();if(!w)w=d.w;LX=x;LY=y;$('ls').value=Math.max(20,Math.min(300,w/.22))}else if(t.charAt(0)=='i'){var i=items[+t.slice(2)];i.fx=x;i.fy=y;if(w)i.fw=w}else{var o=PP[t];o.x=x;o.y=y;if(w)o.w=w}}
+function setDefPos(it,k){var P=$('poster'),el=P.querySelector('[data-k="'+k+'"]'),r=P.getBoundingClientRect();it.fw=it.fw||20;if(el&&el.classList.contains('bk')){var e=el.getBoundingClientRect();it.fw=Math.min(it.fw,e.width/r.width*100*.7,e.height/r.width*100*.55);it.fx=Math.max(0,Math.min(90,(e.left+e.width/2-r.left)/r.width*100-it.fw/2));it.fy=Math.max(0,Math.min(90,(e.top+e.height*.42-r.top)/r.height*100))}else if(el){var e=el.getBoundingClientRect();it.fx=Math.max(0,Math.min(78,(e.left-r.left)/r.width*100));it.fy=Math.max(0,Math.min(90,(e.top-r.top)/r.height*100))}else{it.fx=60;it.fy=30}}
+function esPhoto(t){if(t.charAt(0)=='i'){esItem(+t.slice(2));return}var o=PP[t];$('est').textContent='✏️ Photo';$('esx').innerHTML='<label>Photo size</label><input id="epw" type="range" min="5" max="95" value="'+o.w+'" style="padding:0"><p style="font-size:12px;color:var(--mut);margin:8px 0 0">✋ Poster-il photo drag cheythu evideyum vekkam. Kona-ile manja vattam valichu valuppam maattam.</p><div class="eb"><button id="epc">📷 Change photo</button><button id="epr">✕ Remove</button></div>';$('epw').oninput=function(){o.w=+this.value;draw()};$('epc').onclick=function(){$(t).click()};$('epr').onclick=function(){PH[t]=null;$(t).value='';draw();esClose()};$('es').style.display='flex'}
+[['ph1',900],['ph2',900]].forEach(function(a){$(a[0]).onchange=function(){var f=this.files[0];if(f)rs(f,a[1],function(u){PH[a[0]]=u;draw()})}});
+document.addEventListener('pointerdown',function(e){var h=e.target.closest&&e.target.closest('.lgf');if(!h)return;var p=$('poster');p.style.transform='';var r=p.getBoundingClientRect(),t=h.dataset.t;DR={h:h,t:t,g:getT(t),isH:e.target.classList.contains('rh'),x:e.clientX,y:e.clientY,w:h.offsetWidth,pw:r.width,ph:r.height,m:0};try{h.setPointerCapture(e.pointerId)}catch(_){}});
+document.addEventListener('pointermove',function(e){if(!DR)return;var dx=e.clientX-DR.x,dy=e.clientY-DR.y;if(Math.abs(dx)+Math.abs(dy)>4)DR.m=1;if(!DR.m)return;var g=DR.g;if(DR.isH){var nw=Math.max(4,Math.min(95,g.w*(DR.w+dx)/DR.w));setT(DR.t,g.x,g.y,nw);DR.h.style.width=nw+'cqw';if(DR.t=='logo')$('poster').style.setProperty('--lz',$('ls').value/100)}else{var nx=Math.max(-5,Math.min(95,g.x+dx/DR.pw*100)),ny=Math.max(-5,Math.min(97,g.y+dy/DR.ph*100));setT(DR.t,nx,ny);DR.h.style.left=nx+'%';DR.h.style.top=ny+'%'}});
+['pointerup','pointercancel'].forEach(function(t){document.addEventListener(t,function(){if(DR){if(DR.m){moved=1;if(DR.t=='logo')saveP();setTimeout(function(){moved=0},80)}DR=0}})});
+function msp(){var e=$('msp');if(!e)return;if(cat!='meat'){e.innerHTML='';return}var m=[];items.forEach(function(x,k){if((x.c||'fish')=='meat')m.push([x,k])});e.innerHTML=m.length?'<label>📷 Meat photos (ethinte photo add cheyyanam?)</label><div class="sug">'+m.map(function(a){return'<button onclick="pickPhoto('+a[1]+')">'+(a[0].p?'✅ ':'📷 ')+esc(a[0].n)+'</button>'}).join('')+'</div>':'<p style="font-size:12px;color:var(--mut);margin:8px 0 0">Meat item add cheythaal avide photo add cheyyaanulla button varum.</p>'}
+var _s=sug;sug=function(){_s();msp()};var _r=rows;rows=function(){_r();msp()};msp();
+['fd','fp','fa'].forEach(function(id){$(id).oninput=function(){draw()}});
+function loadSample(){function I(c,n,m,e,em){return{i:-1,c:c,n:n,e:e||'',em:em||'🐟',m:m,o:''}}
+items=[I('fish','ചാള','240'),I('fish','അയല','300'),I('fish','വങ്കട','200'),I('fish','ചൂര','280/240'),I('fish','കൊഞ്ച്','600','','🦐'),I('fish','കോഴി ചാള','160'),I('fish','തേട്','160'),I('fish','കക്ക','300','','🐚'),I('fish','സിലോപ്പിയ','200'),I('fish','കരിമീൻ','500','','🐠'),I('fish','ഉരുളൻ പാര','400'),
+I('piece','കേര','480'),I('piece','മോദ','500'),I('piece','പാര','800'),I('piece','നെയ്മീൻ','1400'),
+I('meat','ചിക്കൻ ലൈവ്','140','Chicken live','🐔'),I('meat','ചിക്കൻ ഇറച്ചി','240','Chicken meat','🍗'),I('meat','ബീഫ്','440','Beef','🐄')];
+$('title').value='ഇന്നത്തെ മീനുകൾ';lastN=0;rows();draw();toast('✓ Sample poster load aayi')}
+draw();</script></body></html>
